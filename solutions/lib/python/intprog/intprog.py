@@ -61,10 +61,10 @@ class IPBase(object):
         :return: tuple (boolean, integer) representing whether it passed the
                 constraint and what the current value of the constraint is.
 
-        :throws: IndexError
+        :throws: IndexError - if constraint_row does not exist or 
+                len(solution) <= len(constraint_row) - 2
         """
-        row = self.constraints[constraint_row]
-        equation = row[:-2]
+        equation, operator, result = self.parse_constraint(constraint_row)
         if len(equation) != len(solution):
             # We're going to use zip later, which silently truncates the
             # longer array. Let's fail now, before we get bad results.
@@ -72,7 +72,7 @@ class IPBase(object):
 
         # multiply the solution and constraint, and then add to get a sum
         total = sum(map(lambda x: x[0]*x[1], zip(solution, equation)))
-        return eval(total, row[-1], row[-2]), total
+        return eval(total, result, operator), total
 
     def eval(self, left_side, right_side, comparison_operator=None):
         """
@@ -88,4 +88,17 @@ class IPBase(object):
         elif comparison_operator == self.LTE:
             return left_side <= right_side
         return left_side == right_side
-        
+
+    def parse_constraint(self, constraint_row):
+        """
+        Break a row in self.constraints into equation, operator, and result
+
+        :param constraint_row: integer for the row in self.constraints
+        :return: tuple (list, int, int) -- the list representing the equation,
+                an int (EQ, GTE, LTE) for the comparison operator, and the
+                right-hand value of the constraint equation
+
+        :throws: IndexError - if constraint_row does not exist
+        """
+        row = self.constraints[constraint_row]
+        return row[:-2], row[-2], row[-1]
