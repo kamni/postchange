@@ -58,22 +58,32 @@ class IPBase(object):
         :param solution: list of integers representing a possible solution
         :param constraint_row: integer index of which row in self.constraints
                 should be checked against the solution
-        :return: tuple (boolean, integer) representing whether it passed the
+        :return: tuple (boolean, numeric) representing whether it passed the
                 constraint and what the current value of the constraint is.
 
         :throws: IndexError - if constraint_row does not exist or 
                 len(solution) <= len(constraint_row) - 2
         """
         equation, operator, result = self.parse_constraint(constraint_row)
-        if len(equation) != len(solution):
-            # We're going to use zip later, which silently truncates the
-            # longer array. Let's fail now, before we get bad results.
-            raise IndexError("Solution and constraints must be of equal length")
-
-        # multiply the solution and constraint, and then add to get a sum
-        total = sum(map(lambda x: x[0]*x[1], zip(solution, equation)))
+        total = self.sum_of_products(solution, equation)
         return eval(total, result, operator), total
 
+    def check_solution(self, solution):
+        """
+        Verifies that the proposed solution fits all constraints.
+
+        :param solution: list of integers representing a possible solution
+        :return: A tuple (boolean, numeric, list) - boolean indicating if the
+                solution fits within the constraints, numeric value of the
+                current solution, and a list of the results of check_constraint
+                on each row
+        """
+        curr_value = self.sum_of_products(solution, self.equation)
+        row_vals = [self.check_constraint(solution, row) for row in self.constraints]
+        passed = bool(filter(lambda x: x[0], row_values))
+        return passed, curr_value, row_vals
+
+    @property
     def eval(self, left_side, right_side, comparison_operator=None):
         """
         Evaluates a comparison expression -- e.g. 3 >= 2
@@ -102,3 +112,22 @@ class IPBase(object):
         """
         row = self.constraints[constraint_row]
         return row[:-2], row[-2], row[-1]
+
+    @property
+    def sum_of_products(self, list1, list2):
+        """
+        Finds the sum of the products of two lists.
+
+        :param list1: list of numeric values
+        :param list2: list of numeric values
+        :return: numeric
+
+        :throws: IndexError if list1 and list2 are not the same length
+        """
+        if len(list1) != len(list2):
+            # We're going to use zip later, which silently truncates the
+            # longer array. Let's fail now, before we get bad results.
+            raise IndexError("Solution and constraints must be of equal length")
+
+        # multiply the solution and constraint, and then add to get a sum
+        return sum(map(lambda x: x[0]*x[1], zip(list1, list2)))
