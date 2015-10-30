@@ -31,7 +31,16 @@ a coin).
 This is just an exploration of different ways to solve this problem. Why?
 Because buying stamps has never been so much fun...
 
+There are plenty of great libraries out there for doing integer programming,
+but this is an exploriation into the algorithms themselves. All but the first
+solution (a POC spreadsheet to show that the problem is solvable) try to rely
+as little as possible on external libraries.
+
 ## Trying Out Existing Solutions
+
+Most solutions require an installation of Python 2.7. The solutions may work
+on other versions of Python, but they have not explicitly been tested against
+them.
 
 ### Solution 1: spreadsheet
 
