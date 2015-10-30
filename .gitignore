@@ -28,6 +28,7 @@ srv_settings.py
 #####################
 .DS_Store
 Thumbs.db
+.~lock*
 
 # Third-party files #
 #####################
