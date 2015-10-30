@@ -52,14 +52,14 @@ and enter the following:
 * Optimize result to: Maximum
 * By changing cells: $C$11:$H$11
 * Limiting conditions:
-** $I$13  <=  $K$13
-** $I$14  =  $K$14  <-- Take special note that this is '='
-** $I$16  <=  $K$16
-** $I$17  <=  $K$17
-** $I$18  <=  $K$18
-** $I$19  <=  $K$19
-** $I$20  <=  $K$20
-** $I$21  <=  $I$21
+  * $I$13  <=  $K$13
+  * $I$14  =  $K$14  <-- Take special note that this is '='
+  * $I$16  <=  $K$16
+  * $I$17  <=  $K$17
+  * $I$18  <=  $K$18
+  * $I$19  <=  $K$19
+  * $I$20  <=  $K$20
+  * $I$21  <=  $I$21
 
 Hit the 'Solve' button, and then choose 'Keep Result'. The number of each coin
 that you should use is in Row 11, cells C-H.
