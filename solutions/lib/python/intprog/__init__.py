@@ -6,4 +6,4 @@ Helper libraries for integer programming (IP) created specifically for
 postchange.
 """
 
-from intprog import IP
+from intprog import IPBase
